@@ -1,0 +1,10 @@
+# Simulation and analysis dependencies for the dual-stream handover study.
+# Versions are those the experiment was developed and run against. The
+# code does not rely on any version-specific behaviour and should work
+# with reasonably recent releases of each package.
+
+pybullet>=3.2
+numpy>=1.24
+scipy>=1.10
+pandas>=2.0
+matplotlib>=3.7

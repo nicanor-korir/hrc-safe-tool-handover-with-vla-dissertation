@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Keep the committed experiment outputs in data/, but ignore any ad hoc
+# scratch runs written elsewhere.
+/tmp_*
+scratch/
+
+# Local project notes, not for the public repo
+CLAUDE.md
