@@ -269,12 +269,13 @@ cannot see. Full tables and the statistical detail are in
 
 ### Figures
 
-| file                                       | shows                                                     |
-| ------------------------------------------ | --------------------------------------------------------- |
-| `safety_intervention_by_condition.png`     | safety intervention rate across conditions                |
-| `intent_accuracy_vs_completion.png`        | intent accuracy over reach completion, 50% point marked   |
-| `fluency_metrics_by_condition.png`         | the three Ortenzi fluency metrics across conditions       |
-| `outcome_confusion_by_condition.png`       | safe, correct catch, missed catch, and false alarm shares |
+| file                                       | shows                                                          |
+| ------------------------------------------ | ------------------------------------------------------------- |
+| `safety_intervention_by_condition.png`     | safety intervention rate across conditions, failures averaged |
+| `safety_intervention_by_scenario.png`      | intervention rate split by scenario, the complementarity result |
+| `intent_accuracy_vs_completion.png`        | intent accuracy over reach completion, 50% point marked       |
+| `fluency_metrics_by_condition.png`         | the three Ortenzi fluency metrics across conditions           |
+| `outcome_confusion_by_condition.png`       | safe, correct catch, missed catch, and false alarm shares     |
 
 ---
 

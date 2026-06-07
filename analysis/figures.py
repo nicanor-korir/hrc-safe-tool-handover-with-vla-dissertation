@@ -13,6 +13,12 @@ Figures produced
       bar chart of safety intervention rate across the four conditions in
       failure scenarios, the headline safety result
 
+  safety_intervention_by_scenario.png
+      the same rate split by failure scenario, one bar per condition. This
+      carries the complementarity result, the confidence-using conditions
+      tall on robot-side failures and only the dual stream lifting the
+      human-side approach column appreciably
+
   intent_accuracy_vs_completion.png
       intent prediction accuracy as a function of how much of the reach
       has been seen, marking the fifty percent operating point
@@ -94,6 +100,82 @@ def figure_safety_intervention(df, figures_dir):
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
     path = os.path.join(figures_dir, "safety_intervention_by_condition.png")
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    return path
+
+
+# Failure scenarios in the order that reads best, the three robot-side
+# groups first and the human-side approach last so the eye lands on the
+# column where the streams diverge.
+SCENARIO_ORDER = ["camera_shift", "lighting", "novel_geometry", "approach_traj"]
+SCENARIO_LABELS = {
+    "camera_shift": "Camera\nshift",
+    "lighting": "Lighting",
+    "novel_geometry": "Novel\ngeometry",
+    "approach_traj": "Approach\ntrajectory",
+}
+
+
+def figure_safety_intervention_by_scenario(df, figures_dir):
+    """
+    Grouped bar chart of safety intervention rate split by failure
+    scenario, one bar per condition within each scenario. This is the
+    figure that carries the complementarity argument. The confidence-using
+    conditions stand tall on the three robot-side scenarios and drop on the
+    human-side approach, while the dual-stream bar is the only one that
+    lifts the approach column appreciably above the single streams.
+    """
+    fail = df[df["scenario"] != NOMINAL]
+
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    x = np.arange(len(SCENARIO_ORDER))
+    width = 0.2
+
+    for i, cond in enumerate(CONDITIONS):
+        rates = []
+        errs = []
+        for scen in SCENARIO_ORDER:
+            cell = fail[(fail["condition"] == cond) & (fail["scenario"] == scen)]
+            r = cell["safety_intervention"].mean() if len(cell) else 0.0
+            n = len(cell)
+            rates.append(r)
+            errs.append(np.sqrt(max(r * (1 - r), 0) / n) if n else 0.0)
+        offset = (i - 1.5) * width
+        bars = ax.bar(
+            x + offset, rates, width, yerr=errs, capsize=3,
+            color=PALETTE[cond], edgecolor="black", linewidth=0.5,
+            label=CONDITION_LABELS[cond].replace("\n", " "),
+        )
+        # Label only the dual-stream and confidence bars on the approach
+        # column, where the divergence the figure exists to show lives.
+        for bar, r, scen in zip(bars, rates, SCENARIO_ORDER):
+            if scen == "approach_traj" and cond in ("confidence_only", "dual_stream"):
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.02,
+                    f"{r:.0%}", ha="center", va="bottom", fontsize=9,
+                )
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([SCENARIO_LABELS[s] for s in SCENARIO_ORDER])
+    ax.set_ylabel("Safety intervention rate")
+    ax.set_ylim(0, 1.15)
+    ax.set_title("Safety intervention rate by failure scenario and condition")
+    # Legend below the axes so it never overlaps the bars or annotations.
+    ax.legend(
+        title="Condition", ncol=4, fontsize=9,
+        loc="upper center", bbox_to_anchor=(0.5, -0.12),
+    )
+    # A light divider separating the robot-side scenarios from the human
+    # side one, so the structural split is visible at a glance.
+    ax.axvline(2.5, color="grey", linestyle=":", alpha=0.6)
+    ax.text(1.0, 1.09, "robot-side failures", ha="center", fontsize=9, color="grey")
+    ax.text(3.0, 1.09, "human-side", ha="center", fontsize=9, color="grey")
+    ax.grid(axis="y", alpha=0.3)
+    fig.tight_layout()
+    path = os.path.join(
+        figures_dir, "safety_intervention_by_scenario.png"
+    )
     fig.savefig(path, dpi=150)
     plt.close(fig)
     return path
@@ -260,6 +342,7 @@ def generate_all(csv_path, figures_dir="data/figures"):
     df = pd.read_csv(csv_path)
     paths = []
     paths.append(figure_safety_intervention(df, figures_dir))
+    paths.append(figure_safety_intervention_by_scenario(df, figures_dir))
     paths.append(figure_intent_accuracy_curve(figures_dir))
     paths.append(figure_fluency_metrics(df, figures_dir))
     paths.append(figure_outcome_confusion(df, figures_dir))
