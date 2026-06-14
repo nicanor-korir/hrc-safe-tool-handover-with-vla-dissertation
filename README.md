@@ -7,7 +7,7 @@ ablation.
 This repository holds the simulation experiments for an MSc dissertation,
 *Safe Tool Handover in Human-Robot Collaboration: A Dual-Stream Framework
 Combining VLA Failure Detection and Human Intent Recognition*, by Nicanor
-Korir (BSBI / UCA), supervised by Professor Vincent English.
+Korir (BSBI / UCA), supervised by Professor Vincent English
 
 ---
 
@@ -19,9 +19,9 @@ can fail, and the human can reach in a way the robot did not expect. A
 single safety signal tends to cover one of these well and the other
 poorly. This study tests whether fusing two complementary streams, one
 watching the robot and one watching the human, gives safer handovers than
-either stream alone or no monitoring at all.
+either stream alone or no monitoring at all
 
-The framework has two streams.
+The framework has two streams:
 
 - A **confidence monitor** in the style of the SAFE failure detector,
   which reads the policy's internal state and raises an alarm when the
@@ -30,12 +30,12 @@ The framework has two streams.
   failure data.
 - An **intent recogniser** that watches the human hand and predicts the
   reach target early, with reliable prediction by the halfway point of
-  the reach.
+  the reach
 
 A rule-based **fusion controller** combines the two into a four-level
 graduated response, proceed, wait, slow, or abort. The four experimental
 conditions are realised by which streams the controller is allowed to
-consult.
+consult
 
 The headline finding from the full run of 1000 trials is that the
 dual-stream framework satisfies all three pre-registered success
@@ -43,7 +43,7 @@ criteria. It intervenes on 81.5% of failure trials against 0% for an
 unmonitored baseline, drives unsafe completions to zero, and stays within
 four percentage points of the baseline on both nominal completion and
 nominal false positives. Full numbers are in
-[`experiment/RESULTS.md`](experiment/RESULTS.md).
+[`experiment/RESULTS.md`](experiment/RESULTS.md)
 
 ---
 
@@ -64,7 +64,7 @@ state, which is the Path A analogue of the hidden-layer features a real
 SAFE monitor would consume. Every figure and result is honest about this.
 Full VLA integration and a learned intent transformer are named as
 immediate future work. The detailed caveats are listed in
-[`experiment/RESULTS.md`](experiment/RESULTS.md).
+[`experiment/RESULTS.md`](experiment/RESULTS.md)
 
 ---
 
@@ -105,7 +105,7 @@ A two-factor design crosses four monitoring conditions with four failure
 scenario groups, at fifty trials per cell. That gives 800 failure-scenario
 trials. A nominal control group of fifty trials per condition adds 200
 more, for 1000 trials in total. Fifty trials per cell follows the power
-guidance for HRI studies in Bartlett et al. (2022).
+guidance for HRI studies in Bartlett et al. (2022)
 
 **Conditions (the ablation)**
 
@@ -126,7 +126,7 @@ guidance for HRI studies in Bartlett et al. (2022).
 | `approach_traj`  | human reaches early and off-axis, release timing stressed |
 
 A `nominal` control group runs the same handover with no perturbation,
-which is what the false positive rate is measured against.
+which is what the false positive rate is measured against
 
 **Tools**, all presented handle-first per Ortenzi et al. (2021)
 
@@ -161,24 +161,24 @@ Binary outcomes.
 
 ### Pre-registered hypothesis
 
-The dual-stream framework is registered to win only if all three hold.
+The dual-stream framework is registered to win only if all three hold
 
 1. Safety intervention rate in failure groups is statistically higher than
-   the unmonitored baseline.
+   the unmonitored baseline
 2. Nominal false positive rate is no more than ten percentage points above
-   the unmonitored baseline.
+   the unmonitored baseline
 3. Nominal completion rate is within ten percentage points of the
-   unmonitored baseline.
+   unmonitored baseline
 
 The analysis reports each condition plainly and the experiment is
-falsifiable. On the full run all three hold.
+falsifiable. On the full run all three hold
 
 ---
 
 ## Installation
 
 The project uses PyBullet for physics and the standard scientific Python
-stack for analysis.
+stack for analysis
 
 ### With conda
 
@@ -197,18 +197,18 @@ pip install -r requirements.txt
 ```
 
 The experiment runs headless, so no display is required. The smoke tests
-in `environment/` open a GUI window if run directly, which is optional.
+in `environment/` open a GUI window if run directly, which is optional
 
 ---
 
 ## Reproducing the study
 
 All commands run from the repository root. The package imports are
-relative, so set `PYTHONPATH` to the root or run the modules with `-m`.
+relative, so set `PYTHONPATH` to the root or run the modules with `-m`
 
 ### 1. Check the build with smoke tests
 
-Each module has a self-contained test in its `__main__` block.
+Each module has a self-contained test in its `__main__` block
 
 ```bash
 PYTHONPATH=. python -m policy.handover_policy
@@ -219,13 +219,13 @@ PYTHONPATH=. python -m fusion.response_controller
 
 ### 2. Run a pilot first
 
-A small pilot checks the protocol before committing to the full run.
+A small pilot checks the protocol before committing to the full run
 
 ```bash
 PYTHONPATH=. python -m experiment.runner --pilot
 ```
 
-This writes `data/handover_results_pilot.csv`, five trials per cell.
+This writes `data/handover_results_pilot.csv`, five trials per cell
 
 ### 3. Run the full experiment
 
@@ -234,7 +234,7 @@ PYTHONPATH=. python -m experiment.runner --trials 50 --seed 2026
 ```
 
 This writes `data/handover_results_full.csv`, 1000 trials, in about five
-minutes on a laptop. The base seed makes the run reproducible.
+minutes on a laptop. The base seed makes the run reproducible
 
 ### 4. Analyse
 
@@ -245,7 +245,7 @@ PYTHONPATH=. python -m analysis.figures data/handover_results_full.csv
 
 The statistics command prints the full ANOVA, the binary tests, the
 post-hoc comparisons, and the hypothesis verdict. The figures command
-writes four PNGs to `data/figures/`.
+writes four PNGs to `data/figures/`
 
 ---
 
@@ -265,7 +265,7 @@ breakdown. The confidence stream catches robot-side failures at 98 to
 100% but only 8% of unexpected human approaches. Adding the intent stream
 lifts approach interventions to 28%, a failure the confidence stream
 cannot see. Full tables and the statistical detail are in
-[`experiment/RESULTS.md`](experiment/RESULTS.md).
+[`experiment/RESULTS.md`](experiment/RESULTS.md)
 
 ### Figures
 
@@ -299,4 +299,4 @@ The citations implemented in the code, named in module docstrings.
 
 ## Author
 
-Nicanor Korir, MSc, BSBI / UCA. Supervisor Professor Vincent English.
+Nicanor Korir, MSc AI & Robotics
